@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>São Paulo &mdash; Touristic Spots</title>
+<style>
+  :root {
+    --ink: #14181f;
+    --ink-soft: #4c5566;
+    --paper: #f6f4ef;
+    --card: #ffffff;
+    --accent: #b3452c;
+    --accent-2: #1f4e5f;
+    --line: #e2ddd2;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0;
+  }
+
+  a { color: inherit; }
+
+  /* ---------- Header ---------- */
+  header {
+    position: relative;
+    padding: 7rem 1.5rem 6rem;
+    color: #fff;
+    overflow: hidden;
+    background:
+      linear-gradient(160deg, rgba(20,24,31,.82), rgba(31,78,95,.78)),
+      linear-gradient(45deg, #b3452c, #1f4e5f);
+    text-align: center;
+  }
+
+  header .skyline {
+    position: absolute;
+    left: 0; right: 0; bottom: -2px;
+    width: 100%;
+    height: 120px;
+    display: block;
+    opacity: .35;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: .72rem;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    padding: .45rem 1rem;
+    border: 1px solid rgba(255,255,255,.45);
+    border-radius: 100px;
+    margin-bottom: 1.6rem;
+    backdrop-filter: blur(2px);
+  }
+
+  header h1 {
+    font-size: clamp(2.6rem, 8vw, 5rem);
+    letter-spacing: -.02em;
+  }
+
+  header h1 span {
+    display: block;
+    font-family: "Inter", Helvetica, Arial, sans-serif;
+    font-size: clamp(.85rem, 2.2vw, 1.05rem);
+    font-weight: 400;
+    letter-spacing: .32em;
+    text-transform: uppercase;
+    opacity: .8;
+    margin-top: 1.1rem;
+  }
+
+  header p.lede {
+    max-width: 46rem;
+    margin: 1.8rem auto 0;
+    font-size: clamp(1rem, 2.4vw, 1.15rem);
+    opacity: .92;
+  }
+
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2.5rem;
+    margin-top: 3rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .stats div { min-width: 90px; }
+
+  .stats strong {
+    display: block;
+    font-family: Georgia, serif;
+    font-size: 1.9rem;
+    line-height: 1;
+  }
+
+  .stats small {
+    font-size: .68rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    opacity: .75;
+  }
+
+  /* ---------- Layout ---------- */
+  main {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 1.5rem 5rem;
+  }
+
+  .section-head {
+    margin: 4.5rem 0 2rem;
+    max-width: 40rem;
+  }
+
+  .section-head .kicker {
+    font-size: .7rem;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: .6rem;
+  }
+
+  .section-head h2 { font-size: clamp(1.7rem, 4vw, 2.4rem); }
+
+  .section-head p {
+    color: var(--ink-soft);
+    margin: .8rem 0 0;
+  }
+
+  /* ---------- Filters ---------- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+    margin-bottom: 2.2rem;
+  }
+
+  .filters button {
+    font: inherit;
+    font-size: .84rem;
+    padding: .5rem 1.1rem;
+    border-radius: 100px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all .18s ease;
+  }
+
+  .filters button:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+  }
+
+  .filters button[aria-pressed="true"] {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: #fff;
+  }
+
+  /* ---------- Cards ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.6rem;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform .22s ease, box-shadow .22s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px -18px rgba(20,24,31,.35);
+  }
+
+  .card .thumb {
+    position: relative;
+    height: 168px;
+    display: grid;
+    place-items: center;
+    padding: 2.6rem 1.1rem 1.1rem;
+    text-align: center;
+    color: #fff;
+    font-family: Georgia, serif;
+    font-size: 3.2rem;
+    line-height: 1.02;
+    letter-spacing: -.03em;
+    overflow: hidden;
+  }
+
+  .card .thumb.two-line { font-size: 2.1rem; }
+
+  .thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,.28));
+  }
+
+  .thumb span { position: relative; z-index: 1; opacity: .9; }
+
+  .tag {
+    position: absolute;
+    z-index: 2;
+    top: .9rem; left: .9rem;
+    background: rgba(255,255,255,.94);
+    color: var(--ink);
+    font-size: .64rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: .32rem .7rem;
+    border-radius: 100px;
+  }
+
+  .card .body {
+    padding: 1.3rem 1.4rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .card h3 { font-size: 1.18rem; }
+
+  .card .where {
+    font-size: .76rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin: .45rem 0 .8rem;
+    font-weight: 600;
+  }
+
+  .card p {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: .93rem;
+    flex: 1;
+  }
+
+  .meta {
+    display: flex;
+    gap: 1.2rem;
+    margin-top: 1.2rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: .78rem;
+    color: var(--ink-soft);
+  }
+
+  .meta b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Tips ---------- */
+  .tips {
+    background: var(--ink);
+    color: #f2efe9;
+    border-radius: var(--radius);
+    padding: 2.6rem 2rem;
+    margin-top: 4.5rem;
+  }
+
+  .tips h2 { color: #fff; font-size: clamp(1.5rem, 3.6vw, 2rem); }
+
+  .tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.6rem;
+    margin-top: 2rem;
+  }
+
+  .tips-grid h3 {
+    font-family: "Inter", Helvetica, Arial, sans-serif;
+    font-size: .78rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: #e8a48f;
+    margin-bottom: .5rem;
+  }
+
+  .tips-grid p {
+    margin: 0;
+    font-size: .9rem;
+    color: rgba(242,239,233,.78);
+  }
+
+  footer {
+    text-align: center;
+    padding: 2.5rem 1.5rem 3.5rem;
+    color: var(--ink-soft);
+    font-size: .82rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .hidden { display: none !important; }
+
+  @media (max-width: 600px) {
+    header { padding: 4.5rem 1.2rem 4.5rem; }
+    .stats { gap: 1.6rem; }
+    .tips { padding: 2rem 1.3rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Brazil &middot; Travel Guide</div>
+  <h1>São Paulo<span>Twelve places worth the trip</span></h1>
+  <p class="lede">
+    A city of 12 million that never quite stops. Concrete canyons, Japanese
+    noodle bars, world-class museums and a park bigger than Central Park &mdash;
+    here is where to start.
+  </p>
+  <div class="stats">
+    <div><strong>12M</strong><small>Residents</small></div>
+    <div><strong>1554</strong><small>Founded</small></div>
+    <div><strong>110+</strong><small>Museums</small></div>
+    <div><strong>60+</strong><small>Nationalities</small></div>
+  </div>
+  <svg class="skyline" viewBox="0 0 998 120" preserveAspectRatio="none" aria-hidden="true">
+    <path fill="#14181f" d="M0,120V78h38V54h26v24h30V38h34v40h22V62h40v16h28V30h30v48h26V58h44v20h30V44h32v34h28V66h38v12h34V36h30v42h26V60h42v18h30V48h34v30h24V64h40v14h28V34h32v44h26V56h44v22h30V42h32v36h28V68h38v10h34V120Z"/>
+  </svg>
+</header>
+
+<main>
+
+  <div class="section-head">
+    <div class="kicker">The Shortlist</div>
+    <h2>Where to go</h2>
+    <p>Filter by what you're in the mood for. Every spot below is reachable by metro, bus or a short ride.</p>
+  </div>
+
+  <div class="filters" id="filters">
+    <button aria-pressed="true" data-filter="all">All</button>
+    <button aria-pressed="false" data-filter="art">Art &amp; Culture</button>
+    <button aria-pressed="false" data-filter="outdoors">Outdoors</button>
+    <button aria-pressed="false" data-filter="food">Food &amp; Markets</button>
+    <button aria-pressed="false" data-filter="architecture">Architecture</button>
+    <button aria-pressed="false" data-filter="neighborhood">Neighborhoods</button>
+  </div>
+
+  <div class="grid" id="grid">
+
+    <article class="card" data-cat="art architecture">
+      <div class="thumb" style="background:linear-gradient(135deg,#b3452c,#e0603f)">
+        <span class="tag">Art &amp; Culture</span><span>MASP</span>
+      </div>
+      <div class="body">
+        <h3>MASP</h3>
+        <div class="where">Avenida Paulista</div>
+        <p>Lina Bo Bardi's red-beamed glass box floats above the avenue. Inside,
+           paintings hang on glass easels in one open room &mdash; no walls, no
+           prescribed route. The best collection of European art in the
+           Southern Hemisphere.</p>
+        <div class="meta"><span><b>2h</b> visit</span><span>Closed <b>Mon</b></span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="outdoors art">
+      <div class="thumb" style="background:linear-gradient(135deg,#2f6b4f,#7aa86a)">
+        <span class="tag">Outdoors</span><span>Ibirapuera</span>
+      </div>
+      <div class="body">
+        <h3>Parque Ibirapuera</h3>
+        <div class="where">Vila Mariana</div>
+        <p>São Paulo's green heart: 400 acres of lakes, running paths and
+           Niemeyer-designed pavilions. Come Sunday morning for the cyclists,
+           the coconut vendors and the free museums clustered at its edge.</p>
+        <div class="meta"><span><b>3h+</b> visit</span><span>Open <b>daily</b></span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="neighborhood architecture">
+      <div class="thumb" style="background:linear-gradient(135deg,#1f4e5f,#3d8296)">
+        <span class="tag">Neighborhood</span><span>Centro</span>
+      </div>
+      <div class="body">
+        <h3>Centro Histórico</h3>
+        <div class="where">Sé &amp; República</div>
+        <p>Start at Pátio do Colégio where the city began in 1554, then walk to
+           the neo-Gothic Catedral da Sé, Theatro Municipal and the Art Deco
+           Edifício Martinelli. Gritty, grand and entirely walkable by day.</p>
+        <div class="meta"><span><b>Half day</b></span><span>Go <b>daytime</b></span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="food neighborhood">
+      <div class="thumb" style="background:linear-gradient(135deg,#c2703a,#e8a15c)">
+        <span class="tag">Food</span><span>Mercado</span>
+      </div>
+      <div class="body">
+        <h3>Mercado Municipal</h3>
+        <div class="where">Rua da Cantareira</div>
+        <p>Stained-glass windows over towering fruit stalls. Order the
+           legendary mortadella sandwich at Bar do Mané and a pastel de bacalhau
+           upstairs. Loud, crowded and delicious &mdash; arrive hungry.</p>
+        <div class="meta"><span><b>1&ndash;2h</b></span><span>Best <b>morning</b></span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="architecture art">
+      <div class="thumb" style="background:linear-gradient(135deg,#5a4a7a,#8f7db8)">
+        <span class="tag">Architecture</span><span>Copan</span>
+      </div>
+      <div class="body">
+        <h3>Edifício Copan</h3>
+        <div class="where">República</div>
+        <p>Niemeyer's great concrete wave, 38 storeys and 1,160 apartments with
+           its own postal code. Book ahead for the rooftop tour: the best
+           360° view of the endless grey horizon.</p>
+        <div class="meta"><span><b>1h</b> tour</span><span><b>Booking</b> needed</span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="neighborhood food">
+      <div class="thumb" style="background:linear-gradient(135deg,#a03546,#d4677a)">
+        <span class="tag">Neighborhood</span><span>Liberdade</span>
+      </div>
+      <div class="body">
+        <h3>Liberdade</h3>
+        <div class="where">Japanese Quarter</div>
+        <p>Home to the largest Japanese diaspora on earth, marked by red suspended
+           lanterns along Rua Galvão Bueno. Ramen shops, Okinawan bakeries and a
+           Sunday street fair of takoyaki and yakisoba.</p>
+        <div class="meta"><span><b>2h</b> visit</span><span>Best <b>Sunday</b></span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="art">
+      <div class="thumb" style="background:linear-gradient(135deg,#3a5a40,#6d8f72)">
+        <span class="tag">Art &amp; Culture</span><span>Pina</span>
+      </div>
+      <div class="body">
+        <h3>Pinacoteca do Estado</h3>
+        <div class="where">Luz</div>
+        <p>The city's oldest art museum, in a beautifully gutted 1900s brick
+           building reworked by Paulo Mendes da Rocha. Brazilian painting and
+           sculpture from the 19th century onward, plus a lovely light-filled café.</p>
+        <div class="meta"><span><b>2h</b> visit</span><span>Closed <b>Tue</b></span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="neighborhood food">
+      <div class="thumb two-line" style="background:linear-gradient(135deg,#7a4a2c,#b3784c)">
+        <span class="tag">Neighborhood</span><span>Vila<br>Madalena</span>
+      </div>
+      <div class="body">
+        <h3>Vila Madalena</h3>
+        <div class="where">West Zone</div>
+        <p>Galleries, boteco bars and the Beco do Batman &mdash; an alleyway
+           repainted constantly by street artists. The neighbourhood to eat and
+           drink in after dark; walk it in daylight for the murals.</p>
+        <div class="meta"><span><b>3h</b> visit</span><span>Great <b>at night</b></span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="architecture art">
+      <div class="thumb" style="background:linear-gradient(135deg,#264653,#4a8290)">
+        <span class="tag">Architecture</span><span>SESC</span>
+      </div>
+      <div class="body">
+        <h3>SESC Pompéia</h3>
+        <div class="where">Água Branca</div>
+        <p>Lina Bo Bardi turned a drum factory into a cultural centre with two
+           raw concrete towers joined by mid-air walkways. Theatre, pool,
+           workshops and a canteen locals actually use. Free to wander.</p>
+        <div class="meta"><span><b>1&ndash;2h</b></span><span>Closed <b>Mon</b></span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="outdoors">
+      <div class="thumb" style="background:linear-gradient(135deg,#1d6b6b,#4fa3a3)">
+        <span class="tag">Outdoors</span><span>Cantareira</span>
+      </div>
+      <div class="body">
+        <h3>Serra da Cantareira</h3>
+        <div class="where">North Zone</div>
+        <p>One of the largest urban rainforests in the world, right at the city
+           limit. Trails through Atlantic forest, waterfalls and the Pedra Grande
+           lookout with the whole skyline laid out below.</p>
+        <div class="meta"><span><b>Full day</b></span><span>Bring <b>water</b></span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="art architecture">
+      <div class="thumb" style="background:linear-gradient(135deg,#8a5a2b,#c99356)">
+        <span class="tag">Art &amp; Culture</span><span>Língua</span>
+      </div>
+      <div class="body">
+        <h3>Museu da Língua Portuguesa</h3>
+        <div class="where">Estação da Luz</div>
+        <p>Inside a Victorian railway station, an entirely interactive museum
+           about the Portuguese language. Rebuilt after a 2015 fire and reopened
+           in 2021 &mdash; far more fun than it sounds.</p>
+        <div class="meta"><span><b>1.5h</b></span><span>Closed <b>Mon</b></span></div>
+      </div>
+    </article>
+
+    <article class="card" data-cat="food">
+      <div class="thumb two-line" style="background:linear-gradient(135deg,#6b2c39,#a8515f)">
+        <span class="tag">Food</span><span>Rua<br>Augusta</span>
+      </div>
+      <div class="body">
+        <h3>Rua Augusta</h3>
+        <div class="where">Consolação</div>
+        <p>The city's most restless street: pizzerias, dive bars, sneaker shops
+           and clubs that only fill after 1am. Head to the lower stretch near
+           Centro for the grittiest, best nightlife in Brazil.</p>
+        <div class="meta"><span><b>Evening</b></span><span>Busiest <b>Fri&ndash;Sat</b></span></div>
+      </div>
+    </article>
+
+  </div>
+
+  <section class="tips">
+    <h2>Know before you go</h2>
+    <div class="tips-grid">
+      <div>
+        <h3>Getting around</h3>
+        <p>The metro is clean, cheap and fast but doesn't reach everywhere. Buy a
+           Bilhete Único card, and use ride apps late at night.</p>
+      </div>
+      <div>
+        <h3>When to visit</h3>
+        <p>April to September is drier and milder. Summer (Dec&ndash;Mar) brings
+           heavy afternoon downpours that clear within the hour.</p>
+      </div>
+      <div>
+        <h3>Eating</h3>
+        <p>Lunch is the big meal &mdash; look for "prato do dia" specials.
+           Japanese, Italian and Lebanese food here rivals anywhere.</p>
+      </div>
+      <div>
+        <h3>Staying safe</h3>
+        <p>Keep phones out of sight on the street, avoid Centro after dark, and
+           carry only what you need for the day.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Built as a sample travel guide &middot; Details change &mdash; check opening hours before visiting.
+</footer>
+
+<script>
+  const filters = document.getElementById('filters');
+  const cards = [...document.querySelectorAll('#grid .card')];
+
+  filters.addEventListener('click', (e) => {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+
+    filters.querySelectorAll('button').forEach(b =>
+      b.setAttribute('aria-pressed', String(b === btn))
+    );
+
+    const f = btn.dataset.filter;
+    cards.forEach(card => {
+      const match = f === 'all' || card.dataset.cat.split(' ').includes(f);
+      card.classList.toggle('hidden', !match);
+    });
+  });
+</script>
+
+</body>
+</html>
